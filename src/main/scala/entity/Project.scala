@@ -6,10 +6,13 @@ import org.elasticsearch.common.joda.time.DateTime
 case class Project(supervisor: String,
                    startDate: DateTime,
                    duration: Long)
-  extends DocumentMap {
+  extends Mappable {
   override def map: Map[String, Any] = {
     val fieldNames = this.getClass.getDeclaredFields.map(_.getName)
-    val values = Project.unapply(this).get.productIterator.toSeq
+    val values = Project.unapply(this).get.productIterator.map {
+      case obj: Mappable => obj.map
+      case x: Any => x
+    }.toSeq
 
     fieldNames.zip(values).toMap
   }
@@ -20,9 +23,10 @@ object Project {
     override def json(t: Project): String =
       s"""
          |{
-         |  "supervisor" : ${t.supervisor},
-         |  "startDate" : ${t.startDate},
+         |  "supervisor" : "${t.supervisor}",
+         |  "startDate" : "${t.startDate.getMillis}",
          |  "duration" : ${t.duration}
+         |}
        """.stripMargin
   }
 }

@@ -2,7 +2,9 @@ package enumaration
 
 import enumeratum.{Enum, EnumEntry}
 
-sealed trait Company extends EnumEntry
+sealed trait Company extends EnumEntry{
+  override def toString = getClass.getSimpleName.takeWhile(_ != '$')
+}
 
 object Company extends Enum[Company]{
   override def values: Seq[Company] = findValues

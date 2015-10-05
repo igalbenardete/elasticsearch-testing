@@ -21,7 +21,7 @@ object ElasticAgent {
 
     if (!indexIsExist.getState.routingTable().indicesRouting().containsKey("population")) {
       client.execute {
-        create index "population" shards 1 replicas 1 mappings(
+        create index "population" shards 1 replicas 1 mappings (
           "Student" as(
             "name" typed StringType,
             "age" typed IntegerType,
@@ -30,11 +30,11 @@ object ElasticAgent {
             "currentProject" inner(
               "supervisor" typed StringType,
               "startDate" typed DateType,
-              "duration" typed  LongType
-              ),
+              "duration" typed LongType
+        ),
             "graduation" typed BooleanType
             )
-          )
+        )
       }
     }
   }
@@ -53,20 +53,20 @@ object ElasticAgent {
         }.await
       case s: Student =>
         client.execute {
-          index into "population" / "Student" source s
+          index into "population" / "Student" fields s.map
         }.await
     }
   }
   def deleteAllIndices() = client.execute(deleteIndex("_all")).await
 
-//  val studentMapping = mapping(
-//      "Student" as(
-//        "name" typed StringType,
-//        "age" typed IntegerType,
-//        "college" typed StringType,
-//        "birthDate" typed DateType,
-//        "currentProject" typed ObjectType,
-//        "graduation" typed BooleanType
-//        )
+//  val studentMapping =
 //    )
+//
+//  "currentProject" inner(
+//    "supervisor" typed StringType,
+//    "startDate" typed DateType,
+//    "duration" typed  LongType
+//    ),
+//
+
 }
