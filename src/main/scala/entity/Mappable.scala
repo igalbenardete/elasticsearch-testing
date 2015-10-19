@@ -1,5 +1,5 @@
 package entity
 
 trait Mappable {
-  def map: Map[String, Any]
+  def map[T <: Mappable]: Map[String, Any]
 }

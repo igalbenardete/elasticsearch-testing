@@ -1,6 +1,6 @@
-import entity.{Student, Project, Employee, Person}
+import entity._
 import enumaration.College.Kocaeli
-import enumaration.Company.Cmak
+import enumaration.Company.{Google, Cmak}
 import org.elasticsearch.common.joda.time.DateTime
 
 object ElasticTesting {
@@ -12,8 +12,8 @@ object ElasticTesting {
       manager,
       Employee("Igal", 25, Cmak, Some(manager)),
       Employee("Beril", 24, Cmak, Some(manager)),
-      Student("Sait", 23, Kocaeli, DateTime.now, projectOne, false),
-      Student("Oguzhan", 23, Kocaeli, DateTime.now.minusYears(23), projectOne, false)
+      Student("Sait", 23, Kocaeli, DateTime.now, projectOne, graduationStatus = false),
+      Student("Oguzhan", 23, Kocaeli, DateTime.now.minusYears(23), projectOne, graduationStatus = false)
     )
 
     val employees = Seq(
@@ -21,6 +21,8 @@ object ElasticTesting {
       Employee("Igal", 25, Cmak, Some(manager)),
       Employee("Beril", 24, Cmak, Some(manager))
     )
+
+    val boss = Manager("Igal", 24, "Boss", Google, employees)
 
     val projectTwo = Project("HocaVeli", DateTime.now.minusMonths(1), 40000)
 
@@ -32,11 +34,8 @@ object ElasticTesting {
 
     val s = Student("Sait", 23, Kocaeli, DateTime.now, projectTwo, graduationStatus = false)
     println("HELLO")
-    println(s.map)
-//    ElasticAgent.deleteAllIndices()
-//    ElasticAgent.createIndex()
-    ElasticAgent.addPerson(s)
-//    ElasticAgent.addPerson(em ployees.head)
-
+    ElasticAgent.deleteAllIndices()
+    ElasticAgent.createIndex()
+    ElasticAgent.addPerson(boss)
   }
 }

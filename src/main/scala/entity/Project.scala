@@ -7,10 +7,10 @@ case class Project(supervisor: String,
                    startDate: DateTime,
                    duration: Long)
   extends Mappable {
-  override def map: Map[String, Any] = {
+  override def map[T <: Mappable]: Map[String, Any] = {
     val fieldNames = this.getClass.getDeclaredFields.map(_.getName)
     val values = Project.unapply(this).get.productIterator.map {
-      case obj: Mappable => obj.map
+      case obj: T => obj.map
       case x: Any => x
     }.toSeq
 

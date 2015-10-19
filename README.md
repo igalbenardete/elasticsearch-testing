@@ -13,3 +13,6 @@ As their fields they will include:
 * To convert Objects into Json and parse Json data into objects there will be two different methodology.
   1) Elastic Search Indexable & HitAs methods.
   2) Arganout.io Library (JSON Library for Scala) -> https://github.com/argonaut-io/argonaut
+
+
+Check elasticsearch index: localhost:12345/population/_search/?size=1000&pretty=1

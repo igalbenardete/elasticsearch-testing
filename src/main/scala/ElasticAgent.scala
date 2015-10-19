@@ -2,7 +2,7 @@ import com.sksamuel.elastic4s.ElasticClient
 import com.sksamuel.elastic4s.ElasticDsl._
 import com.sksamuel.elastic4s.mappings.FieldType._
 import com.sksamuel.elastic4s.mappings.MappingDefinition
-import entity.{Employee, Person, Student}
+import entity.{Manager, Employee, Person, Student}
 import org.elasticsearch.common.settings.ImmutableSettings
 
 object ElasticAgent {
@@ -20,6 +20,7 @@ object ElasticAgent {
       }.await
 
     if (!indexIsExist.getState.routingTable().indicesRouting().containsKey("population")) {
+      println("Creating Index")
       client.execute {
         create index "population" shards 1 replicas 1 mappings (
           "Student" as(
@@ -54,6 +55,10 @@ object ElasticAgent {
       case s: Student =>
         client.execute {
           index into "population" / "Student" fields s.map
+        }.await
+      case m: Manager =>
+        client.execute{
+          index into "population" / "Manager" fields m.map
         }.await
     }
   }

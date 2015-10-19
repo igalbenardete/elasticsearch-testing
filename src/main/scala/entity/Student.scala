@@ -12,10 +12,10 @@ case class Student(name: String,
                    currentProject: Project,
                    graduationStatus: Boolean)
   extends Person with Mappable {
-  override def map: Map[String, Any] = {
+  override def map[T <: Mappable]: Map[String, Any] = {
     val fieldNames = this.getClass.getDeclaredFields.map(_.getName)
-    val values = Student.unapply(this).get.productIterator.map{
-      case obj: Mappable => obj.map
+    val values: Seq[Any] = Student.unapply(this).get.productIterator.map{
+      case obj: T => obj.map
       case x: Any => x
     }.toSeq
 
